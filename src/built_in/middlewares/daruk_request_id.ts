@@ -3,8 +3,15 @@
  */
 
 import { xRequestId } from 'daruk-request-id';
-import { Daruk } from '../../typings/daruk';
+import { injectable } from 'inversify';
+import Daruk from '../../core/daruk';
+import { defineMiddleware } from '../../decorators';
+import { MiddlewareClass } from '../../typings/daruk';
 
-export default (app: Daruk.DarukCore) => {
-  return xRequestId(app.options.requestId, app);
-};
+@defineMiddleware('daruk_request_id')
+@injectable()
+class DarukRquestId implements MiddlewareClass {
+  public initMiddleware(daruk: Daruk) {
+    return xRequestId(daruk.options.requestId, daruk.app);
+  }
+}

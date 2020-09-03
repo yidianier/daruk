@@ -1,22 +1,17 @@
 import koaBody = require('koa-body');
+import { DarukContext } from '../src';
 
 type RecursivePartial<T> = {
   [P in keyof T]?: T[P] extends (infer U)[]
     ? RecursivePartial<U>[]
     : T[P] extends object
     ? RecursivePartial<T[P]>
-    : T[P]
+    : T[P];
 };
 
 export interface Options {
-  servicePath: string;
-  controllerPath: string;
-  utilPath: string;
-  gluePath: string;
-  configPath: string;
-  darukConfigPath: string;
-  timerPath: string;
-  middlewarePath: string;
+  middlewareOrder: string[];
+  name: string;
   rootPath: string;
   debug: boolean;
   bodyOptions: koaBody.IKoaBodyOptions;
@@ -32,7 +27,7 @@ export interface Options {
   loggerOptions: any;
   customLogger: any;
   loggerMiddleware: {
-    filter?: () => boolean;
+    filter?: (ctx: DarukContext) => boolean;
     requiredLogs?: string[];
   };
   gracefulShutdown: {
